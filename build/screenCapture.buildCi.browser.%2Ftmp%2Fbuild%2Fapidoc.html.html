@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/w0rm/gulp-svgstore"
-
-    >gulp-svgstore (v6.1.0)</a>
+    <a href="https://github.com/w0rm/gulp-svgstore">gulp-svgstore (v6.1.0)</a>
 </h1>
-<h4>Combine svg files into one with <symbol> elements</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<h4>Combine svg files into one with <symbol> elements</symbol></h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-svgstore">module gulp-svgstore</a><ol>
 
@@ -95,63 +88,63 @@
   var inlineSvg = config.inlineSvg || false
   var ids = {}
 
-  var resultSvg = &#x27;&#x3c;svg xmlns=&#x22;http://www.w3.org/2000/svg&#x22;&#x3e;&#x3c;defs/&#x3e;&#x3c;/svg&#x3e;&#x27;
+  var resultSvg = '&lt;svg xmlns="http://www.w3.org/2000/svg"&gt;&lt;defs/&gt;&lt;/svg&gt;'
   if (!inlineSvg) {
     resultSvg =
-      &#x27;&#x3c;?xml version=&#x22;1.0&#x22; encoding=&#x22;UTF-8&#x22;?&#x3e;&#x27; +
-      &#x27;&#x3c;!DOCTYPE svg PUBLIC &#x22;-//W3C//DTD SVG 1.1//EN&#x22; &#x27; +
-      &#x27;&#x22;http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd&#x22;&#x3e;&#x27; +
+      '&lt;?xml version="1.0" encoding="UTF-8"?&gt;' +
+      '&lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" ' +
+      '"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"&gt;' +
       resultSvg
   }
 
   var $ = cheerio.load(resultSvg, { xmlMode: true })
-  var $combinedSvg = $(&#x27;svg&#x27;)
-  var $combinedDefs = $(&#x27;defs&#x27;)
+  var $combinedSvg = $('svg')
+  var $combinedDefs = $('defs')
   var stream = new Stream.Transform({ objectMode: true })
 
   stream._transform = function transform (file, encoding, cb) {
 
     if (file.isStream()) {
-      return cb(new gutil.PluginError(&#x27;gulp-svgstore&#x27;, &#x27;Streams are not supported!&#x27;))
+      return cb(new gutil.PluginError('gulp-svgstore', 'Streams are not supported!'))
     }
 
     if (file.isNull()) return cb()
 
 
-    var $svg = cheerio.load(file.contents.toString(), { xmlMode: true })(&#x27;svg&#x27;)
+    var $svg = cheerio.load(file.contents.toString(), { xmlMode: true })('svg')
 
     if ($svg.length === 0) return cb()
 
     var idAttr = path.basename(file.relative, path.extname(file.relative))
-    var viewBoxAttr = $svg.attr(&#x27;viewBox&#x27;)
-    var preserveAspectRatioAttr = $svg.attr(&#x27;preserveAspectRatio&#x27;)
-    var $symbol = $(&#x27;&#x3c;symbol/&#x3e;&#x27;)
+    var viewBoxAttr = $svg.attr('viewBox')
+    var preserveAspectRatioAttr = $svg.attr('preserveAspectRatio')
+    var $symbol = $('&lt;symbol/&gt;')
 
     if (idAttr in ids) {
-      return cb(new gutil.PluginError(&#x27;gulp-svgstore&#x27;, &#x27;File name should be unique: &#x27; + idAttr))
+      return cb(new gutil.PluginError('gulp-svgstore', 'File name should be unique: ' + idAttr))
     }
 
     ids[idAttr] = true
 
     if (!fileName) {
       fileName = path.basename(file.base)
-      if (fileName === &#x27;.&#x27; || !fileName) {
-        fileName = &#x27;svgstore.svg&#x27;
+      if (fileName === '.' || !fileName) {
+        fileName = 'svgstore.svg'
       } else {
-        fileName = fileName.split(path.sep).shift() + &#x27;.svg&#x27;
+        fileName = fileName.split(path.sep).shift() + '.svg'
       }
     }
 
-    if (file &#x26;&#x26; isEmpty) {
+    if (file &amp;&amp; isEmpty) {
       isEmpty = false
     }
 
-    $symbol.attr(&#x27;id&#x27;, idAttr)
+    $symbol.attr('id', idAttr)
     if (viewBoxAttr) {
-      $symbol.attr(&#x27;viewBox&#x27;, viewBoxAttr)
+      $symbol.attr('viewBox', viewBoxAttr)
     }
     if (preserveAspectRatioAttr) {
-      $symbol.attr(&#x27;preserveAspectRatio&#x27;, preserveAspectRatioAttr)
+      $symbol.attr('preserveAspectRatio', preserveAspectRatioAttr)
     }
 
     var attrs = $svg[0].attribs
@@ -163,20 +156,20 @@
         if (storedNs !== undefined) {
           if (storedNs !== attrNs) {
             gutil.log(gutil.colors.red(
-              attrName + &#x27; namespace appeared multiple times with different value.&#x27; +
-              &#x27; Keeping the first one : &#x22;&#x27; + storedNs +
-              &#x27;&#x22;.\nEach namespace must be unique across files.&#x27;
+              attrName + ' namespace appeared multiple times with different value.' +
+              ' Keeping the first one : "' + storedNs +
+              '".\nEach namespace must be unique across files.'
             ))
           }
         } else {
           for (var nsName in namespaces) {
             if (namespaces[nsName] === attrNs) {
               gutil.log(gutil.colors.yellow(
-                &#x27;Same namespace value under different names : &#x27; +
+                'Same namespace value under different names : ' +
                   nsName +
-                  &#x27; and &#x27; +
+                  ' and ' +
                   attrName +
-                &#x27;.\nKeeping both.&#x27;
+                '.\nKeeping both.'
               ))
             }
           }
@@ -185,8 +178,8 @@
       }
     }
 
-    var $defs = $svg.find(&#x27;defs&#x27;)
-    if ($defs.length &#x3e; 0) {
+    var $defs = $svg.find('defs')
+    if ($defs.length &gt; 0) {
       $combinedDefs.append($defs.contents())
       $defs.remove()
     }
@@ -223,3 +216,4 @@
     ]
 </div>
 </div>
+</body></html>

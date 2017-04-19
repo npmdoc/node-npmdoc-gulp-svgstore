@@ -61,12 +61,159 @@
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-svgstore">module gulp-svgstore</a><ol>
 
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-svgstore.gulp-svgstore">
+            function <span class="apidocSignatureSpan"></span>gulp-svgstore
+            <span class="apidocSignatureSpan">(config)</span>
+            </a>
+
+        </li>
+
     </ol></li>
 
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.gulp-svgstore" id="apidoc.module.gulp-svgstore">module gulp-svgstore</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-svgstore.gulp-svgstore" id="apidoc.element.gulp-svgstore.gulp-svgstore">
+        function <span class="apidocSignatureSpan"></span>gulp-svgstore
+        <span class="apidocSignatureSpan">(config)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">gulp-svgstore = function (config) {
+
+  config = config || {}
+
+  var namespaces = {}
+  var isEmpty = true
+  var fileName
+  var inlineSvg = config.inlineSvg || false
+  var ids = {}
+
+  var resultSvg = &#x27;&#x3c;svg xmlns=&#x22;http://www.w3.org/2000/svg&#x22;&#x3e;&#x3c;defs/&#x3e;&#x3c;/svg&#x3e;&#x27;
+  if (!inlineSvg) {
+    resultSvg =
+      &#x27;&#x3c;?xml version=&#x22;1.0&#x22; encoding=&#x22;UTF-8&#x22;?&#x3e;&#x27; +
+      &#x27;&#x3c;!DOCTYPE svg PUBLIC &#x22;-//W3C//DTD SVG 1.1//EN&#x22; &#x27; +
+      &#x27;&#x22;http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd&#x22;&#x3e;&#x27; +
+      resultSvg
+  }
+
+  var $ = cheerio.load(resultSvg, { xmlMode: true })
+  var $combinedSvg = $(&#x27;svg&#x27;)
+  var $combinedDefs = $(&#x27;defs&#x27;)
+  var stream = new Stream.Transform({ objectMode: true })
+
+  stream._transform = function transform (file, encoding, cb) {
+
+    if (file.isStream()) {
+      return cb(new gutil.PluginError(&#x27;gulp-svgstore&#x27;, &#x27;Streams are not supported!&#x27;))
+    }
+
+    if (file.isNull()) return cb()
+
+
+    var $svg = cheerio.load(file.contents.toString(), { xmlMode: true })(&#x27;svg&#x27;)
+
+    if ($svg.length === 0) return cb()
+
+    var idAttr = path.basename(file.relative, path.extname(file.relative))
+    var viewBoxAttr = $svg.attr(&#x27;viewBox&#x27;)
+    var preserveAspectRatioAttr = $svg.attr(&#x27;preserveAspectRatio&#x27;)
+    var $symbol = $(&#x27;&#x3c;symbol/&#x3e;&#x27;)
+
+    if (idAttr in ids) {
+      return cb(new gutil.PluginError(&#x27;gulp-svgstore&#x27;, &#x27;File name should be unique: &#x27; + idAttr))
+    }
+
+    ids[idAttr] = true
+
+    if (!fileName) {
+      fileName = path.basename(file.base)
+      if (fileName === &#x27;.&#x27; || !fileName) {
+        fileName = &#x27;svgstore.svg&#x27;
+      } else {
+        fileName = fileName.split(path.sep).shift() + &#x27;.svg&#x27;
+      }
+    }
+
+    if (file &#x26;&#x26; isEmpty) {
+      isEmpty = false
+    }
+
+    $symbol.attr(&#x27;id&#x27;, idAttr)
+    if (viewBoxAttr) {
+      $symbol.attr(&#x27;viewBox&#x27;, viewBoxAttr)
+    }
+    if (preserveAspectRatioAttr) {
+      $symbol.attr(&#x27;preserveAspectRatio&#x27;, preserveAspectRatioAttr)
+    }
+
+    var attrs = $svg[0].attribs
+    for (var attrName in attrs) {
+      if (attrName.match(/xmlns:.+/)) {
+        var storedNs = namespaces[attrName]
+        var attrNs = attrs[attrName]
+
+        if (storedNs !== undefined) {
+          if (storedNs !== attrNs) {
+            gutil.log(gutil.colors.red(
+              attrName + &#x27; namespace appeared multiple times with different value.&#x27; +
+              &#x27; Keeping the first one : &#x22;&#x27; + storedNs +
+              &#x27;&#x22;.\nEach namespace must be unique across files.&#x27;
+            ))
+          }
+        } else {
+          for (var nsName in namespaces) {
+            if (namespaces[nsName] === attrNs) {
+              gutil.log(gutil.colors.yellow(
+                &#x27;Same namespace value under different names : &#x27; +
+                  nsName +
+                  &#x27; and &#x27; +
+                  attrName +
+                &#x27;.\nKeeping both.&#x27;
+              ))
+            }
+          }
+          namespaces[attrName] = attrNs;
+        }
+      }
+    }
+
+    var $defs = $svg.find(&#x27;defs&#x27;)
+    if ($defs.length &#x3e; 0) {
+      $combinedDefs.append($defs.contents())
+      $defs.remove()
+    }
+
+    $symbol.append($svg.contents())
+    $combinedSvg.append($symbol)
+    cb()
+  }
+
+  stream._flush = function flush (cb) {
+    if (isEmpty) return cb()
+    if ($combinedDefs.contents().length === 0) {
+      $combinedDefs.remove()
+    }
+    for (var nsName in namespaces) {
+      $combinedSvg.attr(nsName, namespaces[nsName])
+    }
+    var file = new gutil.File({ path: fileName, contents: new Buffer($.xml()) })
+    this.push(file)
+    cb()
+  }
+
+  return stream;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 </div>
 
