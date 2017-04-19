@@ -1,9 +1,14 @@
-# api documentation for  [gulp-svgstore (v6.1.0)](https://github.com/w0rm/gulp-svgstore)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-svgstore.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-svgstore) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-svgstore.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-svgstore)
+# npmdoc-gulp-svgstore
+
+#### api documentation for  [gulp-svgstore (v6.1.0)](https://github.com/w0rm/gulp-svgstore)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-svgstore.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-svgstore) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-svgstore.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-svgstore)
+
 #### Combine svg files into one with <symbol> elements
 
-[![NPM](https://nodei.co/npm/gulp-svgstore.png?downloads=true)](https://www.npmjs.com/package/gulp-svgstore)
+[![NPM](https://nodei.co/npm/gulp-svgstore.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/gulp-svgstore)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-svgstore/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-gulp-svgstore_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-svgstore/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-gulp-svgstore/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-gulp-svgstore/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-svgstore/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-svgstore/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-gulp-svgstore/build/screenCapture.npmPackageListing.svg)
 
@@ -17,8 +22,7 @@
 
 {
     "author": {
-        "name": "Andrey Kuzmin",
-        "email": "unsoundscapes@gmail.com"
+        "name": "Andrey Kuzmin"
     },
     "bugs": {
         "url": "https://github.com/w0rm/gulp-svgstore/issues"
@@ -57,13 +61,11 @@
     "main": "index.js",
     "maintainers": [
         {
-            "name": "unsoundscapes",
-            "email": "unsoundscapes@gmail.com"
+            "name": "unsoundscapes"
         }
     ],
     "name": "gulp-svgstore",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git://github.com/w0rm/gulp-svgstore.git"
@@ -74,16 +76,6 @@
     "version": "6.1.0"
 }
 ```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module gulp-svgstore](#apidoc.module.gulp-svgstore)
-
-
-
-# <a name="apidoc.module.gulp-svgstore"></a>[module gulp-svgstore](#apidoc.module.gulp-svgstore)
 
 
 
