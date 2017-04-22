@@ -73,7 +73,8 @@
     "scripts": {
         "test": "gulp build && mocha test.js"
     },
-    "version": "6.1.0"
+    "version": "6.1.0",
+    "bin": {}
 }
 ```
 
